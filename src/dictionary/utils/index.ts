@@ -15,7 +15,7 @@ export interface Word {
 
 function searchInCorrespondingDatabase(word: string, firstLetter: string) {
     const filename = /[a-z]/.test(firstLetter) ? firstLetter + '.json' : '#.json';
-    const filePath = `./dictionary/data/${filename}`;
+    const filePath = `../data/${filename}`;
     const raw = fs.readFileSync(filePath, 'utf-8');
     const data = JSON.parse(raw);
 
@@ -37,10 +37,10 @@ async function searchAsync(searchText: string): Promise<Word | undefined> {
 
 function listAllWords(): string[] {
     const result: string[] = [];
-    const dirs = fs.readdirSync('./data', 'utf-8');
+    const dirs = fs.readdirSync('../data', 'utf-8');
 
     dirs.map((dir: string) => {
-        const raw = fs.readFileSync(`./data/${dir}`, 'utf-8');
+        const raw = fs.readFileSync(`../data/${dir}`, 'utf-8');
         const data = JSON.parse(raw);
 
         result.push(...Object.keys(data));
@@ -59,7 +59,7 @@ function isExist(searchText: string): boolean {
     const word = searchText.trim().toLowerCase();
     const firstLetter: string = word.charAt(0);
     const filename = /[a-z]/.test(firstLetter) ? firstLetter + '.json' : '#.json';
-    const filePath = `./data/${filename}`;
+    const filePath = `../data/${filename}`;
     const raw = fs.readFileSync(filePath, 'utf-8');
     const data = JSON.parse(raw);
 
