@@ -1,6 +1,6 @@
 import { Context, InlineKeyboard } from 'grammy';
-import { bot } from '@src/bot';
-import { exists, isEqual } from '@src/utils/index';
+import { bot } from '../bot';
+import { exists, isEqual } from '../utils/index';
 
 enum DIRECTION {
 	UP,

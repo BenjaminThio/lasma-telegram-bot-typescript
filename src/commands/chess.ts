@@ -1,5 +1,5 @@
 import { Context, InlineKeyboard } from 'grammy';
-import { bot } from '@src/bot';
+import { bot } from '../bot';
 
 type Vector2 = [number, number];
 type AlgebraicNotation = `${string}${number}`;

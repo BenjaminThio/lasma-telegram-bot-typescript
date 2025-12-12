@@ -1,4 +1,4 @@
-import { search, type Word, type Definition } from '@src/dictionary/utils/index';
+import { search, type Word, type Definition } from '../dictionary/utils/index';
 import { Context } from 'grammy';
 
 async function Dict(ctx: Context): Promise<void> {
