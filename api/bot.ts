@@ -1,4 +1,5 @@
 
+/*
 import { Context } from 'grammy';
 import { Snake, SnakeCallback } from '@src/commands/snake.js';
 import { TicTacToe, TicTacToeCallback } from '@src/commands/tic_tac_toe.js';
@@ -8,9 +9,18 @@ import { Sokoban, SokobanCallback } from '@src/commands/sokoban.js';
 import { Dict } from '@src/commands/dictionary.js';
 import { test, Time } from '@src/commands/datetime';
 import { Calculator, CalculatorCallback } from '@src/commands/calculator.js';
+*/
+
+import { Bot } from 'grammy';
 import { webhookCallback, GrammyError, HttpError } from 'grammy'
 import { VercelRequest, VercelResponse } from "@vercel/node"
-import { bot } from '@src/bot.js';
+// import { bot } from '@src/bot.js';
+
+const token = process.env.BOT_TOKEN;
+
+if (!token) throw new Error("TOKEN is unset");
+
+export const bot = new Bot(token);
 
 bot.catch((err) => {
     const ctx = err.ctx;
@@ -26,6 +36,7 @@ bot.catch((err) => {
     }
 })
 
+/*
 bot.command('calc', (ctx) => {
 	Calculator(ctx);
 });
@@ -65,6 +76,11 @@ TicTacToeCallback();
 ChessCallback();
 SokobanCallback();
 CalculatorCallback();
+*/
+
+bot.command('test', async (ctx) => {
+	await ctx.reply('Testing123');
+});
 
 export default async (req: VercelRequest, res: VercelResponse) => {
     console.log("Incoming Webhook Request.");
