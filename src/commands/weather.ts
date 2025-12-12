@@ -62,7 +62,7 @@ export async function Weather(ctx: Context): Promise<void> {
 			.join('+');
 	}
 
-	fetch(
+	await fetch(
 		`http://api.openweathermap.org/data/2.5/weather?q=${location}&appid=${API_KEY}&units=metric`
 	)
 		.then(async (response: Response) => {
@@ -112,7 +112,7 @@ export async function Temperature(ctx: Context): Promise<void> {
 			.join('+');
 	}
 
-	fetch(
+	await fetch(
 		`http://api.openweathermap.org/data/2.5/weather?q=${location}&appid=${API_KEY}&units=metric`
 	)
 		.then(async (response: Response) => {
