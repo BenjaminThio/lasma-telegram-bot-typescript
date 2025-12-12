@@ -14,6 +14,7 @@ import { Calculator, CalculatorCallback } from '@src/commands/calculator.js';
 import { Bot } from 'grammy';
 import { webhookCallback, GrammyError, HttpError } from 'grammy'
 import { VercelRequest, VercelResponse } from "@vercel/node"
+import { test, Time } from '@src/commands/datetime';
 // import { bot } from '@src/bot.js';
 
 const token = process.env.BOT_TOKEN;
@@ -77,6 +78,14 @@ ChessCallback();
 SokobanCallback();
 CalculatorCallback();
 */
+
+bot.command('date', (ctx) => {
+	test(ctx);
+});
+
+bot.command('time', (ctx) => {
+	Time(ctx);
+});
 
 bot.command('test', async (ctx) => {
 	await ctx.reply('Testing123');
