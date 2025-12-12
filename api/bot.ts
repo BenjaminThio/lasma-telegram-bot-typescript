@@ -7,14 +7,14 @@ import { Temperature, Weather } from '@src/commands/weather.js';
 import { ChessCallback, PlayChess } from '@src/commands/chess.js';
 import { Sokoban, SokobanCallback } from '@src/commands/sokoban.js';
 import { Dict } from '@src/commands/dictionary.js';
-import { test, Time } from '@src/commands/datetime';
+import { test, Time } from '@src/commands/datetime.js';
 import { Calculator, CalculatorCallback } from '@src/commands/calculator.js';
 */
 
 import { Bot } from 'grammy';
 import { webhookCallback, GrammyError, HttpError } from 'grammy'
 import { VercelRequest, VercelResponse } from "@vercel/node"
-import { test, Time } from '@src/commands/datetime';
+import { test, Time } from '@src/commands/datetime.js';
 // import { bot } from '@src/bot.js';
 
 const token = process.env.BOT_TOKEN;
