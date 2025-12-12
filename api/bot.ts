@@ -14,7 +14,7 @@ import { Calculator, CalculatorCallback } from '@src/commands/calculator.js';
 import { Bot } from 'grammy';
 import { webhookCallback, GrammyError, HttpError } from 'grammy'
 import { VercelRequest, VercelResponse } from "@vercel/node"
-import { test, Time } from '@src/commands/datetime.js';
+import { test, Time } from '../src/commands/datetime';
 // import { bot } from '@src/bot.js';
 
 const token = process.env.BOT_TOKEN;
