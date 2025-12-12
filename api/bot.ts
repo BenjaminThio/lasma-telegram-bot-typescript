@@ -1,27 +1,15 @@
-
-/*
 import { Context } from 'grammy';
-import { Snake, SnakeCallback } from '@src/commands/snake.js';
-import { TicTacToe, TicTacToeCallback } from '@src/commands/tic_tac_toe.js';
-import { Temperature, Weather } from '@src/commands/weather.js';
-import { ChessCallback, PlayChess } from '@src/commands/chess.js';
-import { Sokoban, SokobanCallback } from '@src/commands/sokoban.js';
-import { Dict } from '@src/commands/dictionary.js';
-import { test, Time } from '@src/commands/datetime.js';
-import { Calculator, CalculatorCallback } from '@src/commands/calculator.js';
-*/
-
-import { Bot } from 'grammy';
+import { Snake, SnakeCallback } from '../src/commands/snake.js';
+import { TicTacToe, TicTacToeCallback } from '../src/commands/tic_tac_toe.js';
+import { Temperature, Weather } from '../src/commands/weather.js';
+import { ChessCallback, PlayChess } from '../src/commands/chess.js';
+import { Sokoban, SokobanCallback } from '../src/commands/sokoban.js';
+import { Dict } from '../src/commands/dictionary.js';
+import { test, Time } from '../src/commands/datetime.js';
+import { Calculator, CalculatorCallback } from '../src/commands/calculator';
 import { webhookCallback, GrammyError, HttpError } from 'grammy'
 import { VercelRequest, VercelResponse } from "@vercel/node"
-import { test, Time } from '../src/commands/datetime';
-// import { bot } from '@src/bot.js';
-
-const token = process.env.BOT_TOKEN;
-
-if (!token) throw new Error("TOKEN is unset");
-
-export const bot = new Bot(token);
+import { bot } from '../src/bot';
 
 bot.catch((err) => {
     const ctx = err.ctx;
@@ -37,7 +25,6 @@ bot.catch((err) => {
     }
 })
 
-/*
 bot.command('calc', (ctx) => {
 	Calculator(ctx);
 });
@@ -77,7 +64,6 @@ TicTacToeCallback();
 ChessCallback();
 SokobanCallback();
 CalculatorCallback();
-*/
 
 bot.command('date', (ctx) => {
 	test(ctx);
