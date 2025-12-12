@@ -1,6 +1,6 @@
 import { Context, InlineKeyboard } from 'grammy';
-import { bot } from '@src/bot';
-import { exists, indexOf, isEqual } from '@src/utils/index';
+import { bot } from '@src/bot.js';
+import { exists, indexOf, isEqual } from '@src/utils/index.js';
 
 type Vector2 = [number, number];
 

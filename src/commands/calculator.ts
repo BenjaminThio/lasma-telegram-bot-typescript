@@ -1,5 +1,5 @@
 import { Context, InlineKeyboard } from 'grammy';
-import { bot } from '@src/bot';
+import { bot } from '@src/bot.js';
 
 /*
 interface ExtendedContext extends Context {

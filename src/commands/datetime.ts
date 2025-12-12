@@ -1,4 +1,4 @@
-import { Context } from "grammy";
+import { Context } from 'grammy';
 
 async function test(ctx: Context): Promise<void> {
     const date: Date = new Date();
