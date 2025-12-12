@@ -1,11 +1,11 @@
 import { Context } from 'grammy';
-import { Snake, SnakeCallback } from '../src/commands/snake.js';
-import { TicTacToe, TicTacToeCallback } from '../src/commands/tic_tac_toe.js';
-import { Temperature, Weather } from '../src/commands/weather.js';
-import { ChessCallback, PlayChess } from '../src/commands/chess.js';
-import { Sokoban, SokobanCallback } from '../src/commands/sokoban.js';
-import { Dict } from '../src/commands/dictionary.js';
-import { test, Time } from '../src/commands/datetime.js';
+import { Snake, SnakeCallback } from '../src/commands/snake';
+import { TicTacToe, TicTacToeCallback } from '../src/commands/tic_tac_toe';
+import { Temperature, Weather } from '../src/commands/weather';
+import { ChessCallback, PlayChess } from '../src/commands/chess';
+import { Sokoban, SokobanCallback } from '../src/commands/sokoban';
+import { Dict } from '../src/commands/dictionary';
+import { test, Time } from '../src/commands/datetime';
 import { Calculator, CalculatorCallback } from '../src/commands/calculator';
 import { webhookCallback, GrammyError, HttpError } from 'grammy'
 import { VercelRequest, VercelResponse } from "@vercel/node"
