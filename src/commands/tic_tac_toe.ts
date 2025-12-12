@@ -18,9 +18,9 @@ function RenderKeyboard(): InlineKeyboard {
 	for (let j: number = 0; j < board.length / ROW; j++) {
 		for (let i: number = 0; i < ROW; i++) {
 			if (board[i] === '#') {
-				keyboard.text(numbers[i], i.toString())
+				keyboard.text(numbers[i + j], (i + j).toString())
 			} else {
-				keyboard.text(board[i], i.toString())
+				keyboard.text(board[i + j], (i + j).toString())
 			}
 		}
 
