@@ -1,8 +1,9 @@
 import { Context, InlineKeyboard, InputFile } from 'grammy';
+import ytsr from 'ytsr'; // <--- Use ytsr for searching
 import ytDlp from 'yt-dlp-exec';
 import * as fs from 'fs';
 import * as path from 'path';
-import * as os from 'os'; // <--- Added import
+import * as os from 'os';
 import { bot } from '../bot';
 import ffmpegPath from 'ffmpeg-static';
 
@@ -23,16 +24,15 @@ export async function Play(ctx: Context) {
 
     if (!query) return ctx.reply("Please provide a title. Example: /play shape of you");
 
-    const searchingMsg = await ctx.reply("🔍 Searching via yt-dlp...");
+    const searchingMsg = await ctx.reply("🔍 Searching via ytsr..."); // Updated text
 
     try {
-        const searchResult = await ytDlp(`ytsearch5:${query}`, {
-            dumpSingleJson: true,
-            noWarnings: true,
-            flatPlaylist: true
-        });
-
-        const items = (searchResult as any).entries;
+        // --- CHANGED: Using ytsr instead of yt-dlp ---
+        // ytsr is pure JS, faster, and works on Vercel for listings
+        const searchResults = await ytsr(query, { limit: 5 });
+        
+        // Filter to ensure we only get videos (remove channels/playlists)
+        const items = searchResults.items.filter((item): item is ytsr.Video => item.type === 'video');
 
         if (!items || items.length === 0) {
             return ctx.api.editMessageText(ctx.chat?.id!, searchingMsg.message_id, "No results found.");
@@ -40,13 +40,15 @@ export async function Play(ctx: Context) {
 
         const keyboard = new InlineKeyboard();
 
-        items.forEach((video: any) => {
+        items.forEach((video) => {
             if (!video.id) return;
             const title = video.title || "Unknown Title";
-            keyboard.url("📺 Preview", `https://youtu.be/${video.id}`);
-            // Note: I increased limit to 60 chars for better readability
+            
+            keyboard.url("📺 Preview", video.url);
+            // Limit title length to prevent Telegram button errors
             keyboard.text(title.substring(0, 40), `MUSIC,${ctx.from?.id},${video.id}`).row();
         });
+        
         keyboard.text("♻️ Cancel", `DELETE,${ctx.from?.id}`).row();
 
         await ctx.api.editMessageText(ctx.chat?.id!, searchingMsg.message_id, `Results for: "${query}"`, {
@@ -55,7 +57,8 @@ export async function Play(ctx: Context) {
 
     } catch (err) {
         console.error("Search Error:", err);
-        await ctx.api.editMessageText(ctx.chat?.id!, searchingMsg.message_id, "⚠️ Search failed. Try again later.");
+        // This ensures you actually see the error in the chat if logs fail
+        await ctx.api.editMessageText(ctx.chat?.id!, searchingMsg.message_id, `⚠️ Search failed: ${err instanceof Error ? err.message : String(err)}`);
     }
 }
 
