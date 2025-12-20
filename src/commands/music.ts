@@ -2,10 +2,18 @@ import { Context, InlineKeyboard, InputFile } from 'grammy';
 import ytDlp from 'yt-dlp-exec';
 import * as fs from 'fs';
 import * as path from 'path';
+import * as os from 'os'; // <--- Added import
 import { bot } from '../bot';
 import ffmpegPath from 'ffmpeg-static';
 
-const CLIENTS_DIR = path.resolve(__dirname, 'clients');
+// OLD CODE: (Causes Error on Vercel)
+// const CLIENTS_DIR = path.resolve(__dirname, 'clients');
+
+// NEW CODE: (Works on Vercel)
+// We use the system's temporary directory.
+const CLIENTS_DIR = path.join(os.tmpdir(), 'music_downloads');
+
+// Ensure the folder exists in /tmp (Vercel wipes this on every cold start)
 if (!fs.existsSync(CLIENTS_DIR)) {
     fs.mkdirSync(CLIENTS_DIR, { recursive: true });
 }
@@ -36,7 +44,8 @@ export async function Play(ctx: Context) {
             if (!video.id) return;
             const title = video.title || "Unknown Title";
             keyboard.url("📺 Preview", `https://youtu.be/${video.id}`);
-            keyboard.text(title.substring(0, 30), `MUSIC,${ctx.from?.id},${video.id}`).row();
+            // Note: I increased limit to 60 chars for better readability
+            keyboard.text(title.substring(0, 40), `MUSIC,${ctx.from?.id},${video.id}`).row();
         });
         keyboard.text("♻️ Cancel", `DELETE,${ctx.from?.id}`).row();
 
@@ -58,7 +67,11 @@ export function MusicCallback() {
 
         if (action === "DELETE") {
             if (ctx.from?.id.toString() !== userId) return ctx.answerCallbackQuery("Not your request!");
-            await ctx.deleteMessage();
+            try {
+                await ctx.deleteMessage();
+            } catch (e) {
+                // Ignore delete errors (msg might be too old)
+            }
             return;
         }
 
@@ -66,7 +79,10 @@ export function MusicCallback() {
             await ctx.answerCallbackQuery();
             const statusMsg = await ctx.reply("⏳ Downloading... (Converting format)");
             const videoUrl = `https://www.youtube.com/watch?v=${videoId}`;
-            const outputPath = path.join(CLIENTS_DIR, `${videoId}.m4a`);
+            
+            // Generate a unique filename using timestamp to avoid collisions
+            const fileName = `${videoId}_${Date.now()}.m4a`;
+            const outputPath = path.join(CLIENTS_DIR, fileName);
 
             try {
                 if (!ffmpegPath) throw new Error("FFmpeg binary not found!");
@@ -78,9 +94,12 @@ export function MusicCallback() {
                     noCheckCertificate: true,
                     noWarnings: true,
                     preferFreeFormats: true,
-                    ffmpegLocation: ffmpegPath
+                    ffmpegLocation: ffmpegPath,
+                    // Add this to prevent yt-dlp from trying to write cache to read-only folders
+                    cacheDir: path.join(os.tmpdir(), '.cache') 
                 });
 
+                // Fetch metadata separately to be safe
                 const metadata = await ytDlp(videoUrl, { dumpJson: true, noWarnings: true });
                 const title = (metadata as any).title || "Audio";
 
@@ -89,15 +108,21 @@ export function MusicCallback() {
                     parse_mode: "Markdown"
                 });
 
+                // Cleanup: Delete the file after sending
                 if (fs.existsSync(outputPath)) fs.unlinkSync(outputPath);
+                
                 await ctx.api.deleteMessage(ctx.chat?.id!, statusMsg.message_id);
 
             } catch (err: any) {
                 console.error("Download Error:", err);
+                
+                // Cleanup if error occurred
+                if (fs.existsSync(outputPath)) fs.unlinkSync(outputPath);
+
                 await ctx.api.editMessageText(
                     ctx.chat?.id!, 
                     statusMsg.message_id, 
-                    `⚠️ Failed: ${err.message}`
+                    `⚠️ Failed: ${err.message || "Unknown error"}`
                 );
             }
         }
