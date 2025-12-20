@@ -10,6 +10,8 @@ import { Calculator, CalculatorCallback } from '../src/commands/calculator';
 import { webhookCallback, GrammyError, HttpError } from 'grammy'
 import { VercelRequest, VercelResponse } from "@vercel/node"
 import { bot } from '../src/bot';
+import { Play, MusicCallback } from '../src/commands/music';
+import { Search, ImageCallback } from '../src/commands/search';
 
 bot.catch((err) => {
     const ctx = err.ctx;
@@ -64,6 +66,8 @@ TicTacToeCallback();
 ChessCallback();
 SokobanCallback();
 CalculatorCallback();
+MusicCallback();
+ImageCallback();
 
 bot.command('date', (ctx) => {
 	test(ctx);
@@ -77,6 +81,14 @@ bot.command('test', async (ctx) => {
 	await ctx.reply('Testing123');
 });
 
+bot.command('play', (ctx) => {
+    Play(ctx);
+})
+
+bot.command('search', (ctx) => {
+    Search(ctx);
+})
+
 export default async (req: VercelRequest, res: VercelResponse) => {
     console.log("Incoming Webhook Request.");
 
@@ -87,3 +99,6 @@ export default async (req: VercelRequest, res: VercelResponse) => {
         return res.status(500).send("Error");
     }
 }
+
+if (process.env.NODE_ENV && process.env.NODE_ENV === "local")
+    bot.start();
