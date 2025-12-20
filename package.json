@@ -30,5 +30,8 @@
     "youtubei.js": "^16.0.1",
     "yt-dlp-exec": "^1.0.2",
     "ytsr": "^3.8.4"
+  },
+  "engines": {
+    "node": ">=20.0.0"
   }
 }
